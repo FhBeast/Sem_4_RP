@@ -12,6 +12,7 @@ namespace Lab_1
         public static double RectLeft(Func<double, double> func, double down, double up, double step, Chart chart)
         {
             double integral = 0;
+            chart.Series[0].ChartType = SeriesChartType.Column;
 
             for (double x = down + step; x <= up; x += step)
             {
@@ -25,6 +26,7 @@ namespace Lab_1
         public static double RectRight(Func<double, double> func, double down, double up, double step, Chart chart)
         {
             double integral = 0;
+            chart.Series[0].ChartType = SeriesChartType.Column;
 
             for (double x = down; x <= up - step; x += step)
             {
@@ -38,6 +40,7 @@ namespace Lab_1
         public static double RectCenter(Func<double, double> func, double down, double up, double step, Chart chart)
         {
             double integral = 0;
+            chart.Series[0].ChartType = SeriesChartType.Column;
 
             for (double x = down + (step / 2); x <= up - (step / 2); x += step)
             {
@@ -51,10 +54,11 @@ namespace Lab_1
         public static double Trapezoid(Func<double, double> func, double down, double up, double step, Chart chart)
         {
             double integral = 0;
+            chart.Series[0].ChartType = SeriesChartType.Area;
 
             for (double x = down; x <= up - step; x += step)
             {
-                double field = 0;
+                double field;
 
                 double currentPoint = func(x);
                 double nextPoint = func(x + step);
@@ -64,7 +68,6 @@ namespace Lab_1
                     fieldTriangle -= field;
                     fieldTriangle /= 2;
                     field += fieldTriangle;
-                    chart.Series[0].Points.AddXY(x + (step / 2), currentPoint);
                 }
                 else
                 {
@@ -73,11 +76,11 @@ namespace Lab_1
                     fieldTriangle -= field;
                     fieldTriangle /= 2;
                     field += fieldTriangle;
-                    chart.Series[0].Points.AddXY(x + (step / 2), nextPoint);
                 }
                 integral += field;
+                chart.Series[0].Points.AddXY(x, currentPoint);
             }
-
+            chart.Series[0].Points.AddXY(up, func(up));
             return integral;
         }
     }
