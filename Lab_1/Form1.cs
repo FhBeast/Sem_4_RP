@@ -24,39 +24,43 @@ namespace Lab_1
 
         private void button1_Click(object sender, EventArgs e)
         {
-            double lower_limit = Convert.ToDouble(textBox1.Text);
-            double upper_limit = Convert.ToDouble(textBox2.Text);
+            double lowerLimit = Convert.ToDouble(textBox1.Text);
+            double upperLimit = Convert.ToDouble(textBox2.Text);
             double step = Convert.ToDouble(textBox3.Text);
 
             double border = 2;
 
-            double x_start = lower_limit - border;
-            double x_end = upper_limit + border;
-            double delta_x = step;
+            double xStart = lowerLimit - border;
+            double xEnd = upperLimit + border;
+            double xDelta = step;
 
             chart1.Series[0].Points.Clear();
             chart1.Series[1].Points.Clear();
 
-            for (double x = x_start; x <= x_end; x += delta_x)
+            for (double x = xStart; x <= xEnd; x += xDelta)
             {
                 double u = Function(x);
                 chart1.Series[1].Points.AddXY(x, u);
             }
 
-            label2.Text = lower_limit.ToString();
-            label3.Text = upper_limit.ToString();
+            label2.Text = lowerLimit.ToString();
+            label3.Text = upperLimit.ToString();
 
             if (radioButton1.Checked)
             {
-                label4.Text = CalculateIntegal.RectLeft(new Func<double, double>(Function), lower_limit, upper_limit, step, chart1).ToString();
+                label4.Text = CalculateIntegal.RectLeft(new Func<double, double>(Function), lowerLimit, upperLimit, step, chart1).ToString();
             }
             else if (radioButton2.Checked)
             {
-                label4.Text = CalculateIntegal.RectRight(new Func<double, double>(Function), lower_limit, upper_limit, step).ToString();
+                label4.Text = CalculateIntegal.RectRight(new Func<double, double>(Function), lowerLimit, upperLimit, step, chart1).ToString();
             }
             else if (radioButton3.Checked)
             {
-                label4.Text = CalculateIntegal.RectCenter(new Func<double, double>(Function), lower_limit, upper_limit, step).ToString();
+                label4.Text = CalculateIntegal.RectCenter(new Func<double, double>(Function), lowerLimit, upperLimit, step, chart1).ToString();
+            }
+            else if (radioButton4.Checked)
+            {
+                label4.Text = CalculateIntegal.Trapezoid(new Func<double, double>(Function), lowerLimit, upperLimit, step, chart1).ToString();
             }
         }
 
