@@ -29,6 +29,12 @@ namespace Lab3
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            button6.ForeColor = chart1.PaletteCustomColors[0];
+            button7.ForeColor = chart1.PaletteCustomColors[1];
+            button12.ForeColor = chart1.PaletteCustomColors[2];
+            button4.ForeColor = chart1.PaletteCustomColors[3];
+            button5.ForeColor = chart1.PaletteCustomColors[4];
+
             lowerLimitOne = Convert.ToSingle(textBox1.Text);
             upperLimitOne = Convert.ToSingle(textBox2.Text);
             stepOne = Convert.ToSingle(textBox3.Text);
@@ -82,13 +88,15 @@ namespace Lab3
         private void button8_Click(object sender, EventArgs e)
         {
             UpdateIntegrals();
-            integralOne.Calculate(chart1.Series[0]);
+            float result = integralOne.Calculate(chart1.Series[0]);
+            richTextBox1.Text += string.Format("Первый интеграл {0}\n", result);
         }
 
         private void button9_Click(object sender, EventArgs e)
         {
             UpdateIntegrals();
-            integralTwo.Calculate(chart1.Series[1]);
+            float result = integralTwo.Calculate(chart1.Series[1]);
+            richTextBox1.Text += string.Format("Второй интеграл {0}\n", result);
         }
 
         private void button11_Click(object sender, EventArgs e)
@@ -130,25 +138,67 @@ namespace Lab3
                 stepCommon = integralTwo.Step;
             }
 
-            //float result = 0;
+            float result = 0;
             chart1.Series[2].Points.Clear();
             chart1.Series[2].ChartType = SeriesChartType.Column;
             for (double x = lowerLimitCommon + (stepCommon / 2); x < upperLimitCommon; x += stepCommon)
             {
                 double u = Function(x);
-                //result += (float)(u * step);
+                result += (float)(u * stepCommon);
                 chart1.Series[2].Points.AddXY(x, u);
             }
+            richTextBox1.Text += string.Format("Общая площадь {0}\n", result);
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        public void SelectColor(object sender, int index)
         {
-            colorDialog1.Color = chart1.PaletteCustomColors[0];
+            colorDialog1.Color = chart1.PaletteCustomColors[index];
             if (colorDialog1.ShowDialog() == DialogResult.Cancel)
             {
                 return;
             }
-            chart1.PaletteCustomColors[0] = colorDialog1.Color;
+            chart1.PaletteCustomColors[index] = colorDialog1.Color;
+            var button = sender as Button;
+            button.ForeColor = colorDialog1.Color;
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            SelectColor(sender, 0);
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            SelectColor(sender, 1);
+        }
+
+        private void button12_Click(object sender, EventArgs e)
+        {
+            SelectColor(sender, 2);
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            SelectColor(sender, 3);
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            SelectColor(sender, 4);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            UpdateIntegrals();
+            float result = integralOne.Calculate() + integralTwo.Calculate();
+            richTextBox1.Text += string.Format("Сумма {0}\n", result);
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            UpdateIntegrals();
+            float result = integralOne.Calculate() - integralTwo.Calculate();
+            richTextBox1.Text += string.Format("Разность {0}\n", result);
         }
     }
 }

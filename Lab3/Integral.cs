@@ -9,15 +9,16 @@ namespace Lab3
 {
     class Integral
     {
-        private float lowerLimit;
-        private float upperLimit;
         private float step;
-        private Func<double, double> function;
-        public float LowerLimit { get => lowerLimit; set => lowerLimit = value; }
-        public float UpperLimit { get => upperLimit; set => upperLimit = value; }
+        public float LowerLimit { get; set; }
+        public float UpperLimit { get; set; }
         public float Step
         {
-            get => step; set
+            get
+            {
+                return step;
+            }
+            set
             {
                 if (value <= 0)
                 {
@@ -30,7 +31,7 @@ namespace Lab3
             }
         }
 
-        public Func<double, double> Function { get => function; set => function = value; }
+        public Func<double, double> Function { get; set; }
 
         public Integral()
         {
@@ -39,10 +40,10 @@ namespace Lab3
 
         public Integral(float lowerLimit, float upperLimit, float step, Func<double, double> function)
         {
-            this.lowerLimit = lowerLimit;
-            this.upperLimit = upperLimit;
+            this.LowerLimit = lowerLimit;
+            this.UpperLimit = upperLimit;
             this.step = step;
-            this.function = function;
+            this.Function = function;
         }
 
         public float Calculate(Series series)
@@ -50,7 +51,7 @@ namespace Lab3
             series.Points.Clear();
             series.ChartType = SeriesChartType.Column;
             float result = 0;
-            for (double x = lowerLimit + (step / 2); x < upperLimit; x += step)
+            for (double x = LowerLimit + (step / 2); x < UpperLimit; x += step)
             {
                 double u = Function(x);
                 result += (float)(u * step);
@@ -62,7 +63,7 @@ namespace Lab3
         public float Calculate()
         {
             float result = 0;
-            for (double x = lowerLimit + (step / 2); x < upperLimit; x += step)
+            for (double x = LowerLimit + (step / 2); x < UpperLimit; x += step)
             {
                 double u = Function(x);
                 result += (float)(u * step);
